@@ -1,31 +1,58 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Positive Thoughts - SereneSpace</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Shared Thoughts – SereneSpace</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #e6fff5;
+      padding: 30px;
+      color: #004d40;
+    }
+    h1 {
+      text-align: center;
+      color: #008066;
+    }
+    .thought {
+      background: white;
+      padding: 15px;
+      margin: 10px auto;
+      width: 80%;
+      border-radius: 10px;
+      box-shadow: 0 0 8px rgba(0,128,128,0.1);
+    }
+    .timestamp {
+      font-size: 12px;
+      color: #888;
+      text-align: right;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>🌈 Positive Thoughts</h1>
-      <nav>
-        <a href="index.html">Home</a>
-        <a href="thoughts.html">Thoughts</a>
-        <a href="submit.html">Share</a>
-        <a href="about.html">About</a>
-      </nav>
-    </header>
-    <main>
-      <ul class="thoughts">
-        <li>“Every day may not be good, but there is something good in every day.”</li>
-        <li>“Healing takes time, and that's okay.”</li>
-        <li>“You are stronger than your strongest excuse.”</li>
-        <li>“Rest is productive too.”</li>
-        <li>“Your thoughts matter. Your voice matters. You matter.”</li>
-      </ul>
-    </main>
-  </div>
+  <h1>💬 Shared Positive Thoughts</h1>
+  <div id="thoughtList"></div>
+
+  <script>
+    async function fetchThoughts() {
+      const res = await fetch("http://localhost:3000/thoughts");
+      const thoughts = await res.json();
+
+      const list = document.getElementById("thoughtList");
+      list.innerHTML = "";
+
+      thoughts.forEach(t => {
+        const div = document.createElement("div");
+        div.className = "thought";
+        div.innerHTML = `
+          <p>${t.message}</p>
+          <div class="timestamp">${new Date(t.createdAt).toLocaleString()}</div>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    fetchThoughts();
+  </script>
 </body>
 </html>
