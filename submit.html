@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Share Your Thought – SereneSpace</title>
   <style>
     body {
@@ -61,23 +61,30 @@
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const message = form.message.value;
+      const message = form.message.value.trim();
+      if (!message) {
+        messageDisplay.textContent = "⚠️ Please enter a thought.";
+        return;
+      }
 
-      const res = await fetch("http://localhost:3000/thought", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ message })
-      });
+      try {
+        const res = await fetch("https://serenespace.onrender.com/thought", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message }),
+          mode: "cors"
+        });
 
-      const data = await res.json();
-
-      if (data.success) {
-        messageDisplay.textContent = "✅ Thought submitted successfully!";
-        form.reset();
-      } else {
-        messageDisplay.textContent = "❌ Error: " + (data.error || "Try again later.");
+        const data = await res.json();
+        if (data.success) {
+          messageDisplay.textContent = "✅ Thought submitted!";
+          form.reset();
+        } else {
+          messageDisplay.textContent = "❌ Error: " + (data.error || "Try again.");
+        }
+      } catch (err) {
+        messageDisplay.textContent = "❌ Could not connect to server.";
+        console.error(err);
       }
     });
   </script>
