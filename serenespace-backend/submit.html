@@ -63,12 +63,13 @@
 
       const message = form.message.value;
 
-      const res = await fetch("http://localhost:3000/thought", {
+      const res = await fetch("https://serenespace.onrender.com/thought", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ message })
+        body: JSON.stringify({ message }),
+        mode: "cors"
       });
 
       const data = await res.json();
