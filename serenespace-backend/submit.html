@@ -53,23 +53,27 @@
     <button type="submit">Submit</button>
     <p class="message" id="responseMessage"></p>
   </form>
+<script>
+  const form = document.getElementById("thoughtForm");
+  const messageDisplay = document.getElementById("responseMessage");
 
-  <script>
-    const form = document.getElementById("thoughtForm");
-    const messageDisplay = document.getElementById("responseMessage");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+    const message = form.message.value.trim();
+    if (!message) {
+      messageDisplay.textContent = "⚠️ Please enter a thought before submitting.";
+      return;
+    }
 
-      const message = form.message.value;
-
+    try {
       const res = await fetch("https://serenespace.onrender.com/thought", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ message }),
-        mode: "cors"
+        mode: "cors",
+        body: JSON.stringify({ message })
       });
 
       const data = await res.json();
@@ -80,7 +84,11 @@
       } else {
         messageDisplay.textContent = "❌ Error: " + (data.error || "Try again later.");
       }
-    });
-  </script>
+    } catch (err) {
+      console.error("Submission error:", err);
+      messageDisplay.textContent = "❌ Server error. Please check your connection.";
+    }
+  });
+</script>
 </body>
 </html>
