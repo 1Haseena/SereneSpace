@@ -62,16 +62,14 @@
 
     const message = form.message.value.trim();
     if (!message) {
-      messageDisplay.textContent = "⚠️ Please enter a thought before submitting.";
+      messageDisplay.textContent = "⚠️ Please write something.";
       return;
     }
 
     try {
       const res = await fetch("https://serenespace.onrender.com/thought", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         mode: "cors",
         body: JSON.stringify({ message })
       });
@@ -82,11 +80,11 @@
         messageDisplay.textContent = "✅ Thought submitted successfully!";
         form.reset();
       } else {
-        messageDisplay.textContent = "❌ Error: " + (data.error || "Try again later.");
+        messageDisplay.textContent = "❌ " + (data.error || "Something went wrong.");
       }
     } catch (err) {
-      console.error("Submission error:", err);
-      messageDisplay.textContent = "❌ Server error. Please check your connection.";
+      console.error("Submit error:", err);
+      messageDisplay.textContent = "❌ Failed to reach server.";
     }
   });
 </script>
