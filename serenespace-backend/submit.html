@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Share Your Thought – SereneSpace</title>
   <style>
     body {
@@ -53,40 +53,41 @@
     <button type="submit">Submit</button>
     <p class="message" id="responseMessage"></p>
   </form>
-<script>
-  const form = document.getElementById("thoughtForm");
-  const messageDisplay = document.getElementById("responseMessage");
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  <script>
+    const form = document.getElementById("thoughtForm");
+    const messageDisplay = document.getElementById("responseMessage");
 
-    const message = form.message.value.trim();
-    if (!message) {
-      messageDisplay.textContent = "⚠️ Please write something.";
-      return;
-    }
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-    try {
-      const res = await fetch("https://serenespace.onrender.com/thought", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        mode: "cors",
-        body: JSON.stringify({ message })
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        messageDisplay.textContent = "✅ Thought submitted successfully!";
-        form.reset();
-      } else {
-        messageDisplay.textContent = "❌ " + (data.error || "Something went wrong.");
+      const message = form.message.value.trim();
+      if (!message) {
+        messageDisplay.textContent = "⚠️ Please enter a thought.";
+        return;
       }
-    } catch (err) {
-      console.error("Submit error:", err);
-      messageDisplay.textContent = "❌ Failed to reach server.";
-    }
-  });
-</script>
+
+      try {
+        const res = await fetch("https://serenespace.onrender.com/thought", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message }),
+          mode: "cors"
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          messageDisplay.textContent = "✅ Thought submitted!";
+          form.reset();
+        } else {
+          messageDisplay.textContent = "❌ Error: " + (data.error || "Try again.");
+        }
+      } catch (err) {
+        messageDisplay.textContent = "❌ Could not connect to server.";
+        console.error(err);
+      }
+    });
+  </script>
 </body>
 </html>
+ss
