@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Share Your Thought – SereneSpace</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e6fff5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+    h1 {
+      color: #008066;
+    }
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0, 128, 102, 0.1);
+      width: 300px;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      resize: none;
+    }
+    button {
+      background: #00b386;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+    .message {
+      margin-top: 15px;
+      color: #008000;
+    }
+  </style>
+</head>
+<body>
+  <h1>💬 Share Your Positive Thought</h1>
+  <form id="thoughtForm">
+    <textarea name="message" placeholder="Write something uplifting..." required></textarea>
+    <button type="submit">Submit</button>
+    <p class="message" id="responseMessage"></p>
+  </form>
+
+  <script>
+    const form = document.getElementById("thoughtForm");
+    const messageDisplay = document.getElementById("responseMessage");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const message = form.message.value;
+
+      const res = await fetch("http://localhost:3000/thought", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        messageDisplay.textContent = "✅ Thought submitted successfully!";
+        form.reset();
+      } else {
+        messageDisplay.textContent = "❌ Error: " + (data.error || "Try again later.");
+      }
+    });
+  </script>
+</body>
+</html>
